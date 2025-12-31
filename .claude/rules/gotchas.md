@@ -31,6 +31,17 @@ const posts = defineCollection({
 </style>
 ```
 
+### 外部CSSファイルのインポート
+- `<style is:global>`内で別のCSSファイルをインポートする場合は`@import url("...")`形式を使用
+- 単純な`@import "..."`はビルド時にパス解決エラーになる
+
+```astro
+<style is:global>
+  @reference "../styles/global.css";
+  @import url("../styles/prose.css");
+</style>
+```
+
 ## Pagefind
 
 ### 型定義
