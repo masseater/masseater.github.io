@@ -1,5 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import ComputerIcon from '../components/icons/ComputerIcon.astro';
+import { formatDate } from '../utils/date';
 
 type Props = {
   title: string;
@@ -14,10 +16,6 @@ type Props = {
 
 const { title, description, pubDate, updatedDate, aiModel, researchDate, disclaimer, ogImage } = Astro.props;
 
-const formatDate = (date: Date) => {
-  return date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
-};
-
 const defaultDisclaimer = 'この記事はAIによって調査・生成されたものです。内容の正確性は保証されません。重要な判断を行う前に、公式の情報源を確認してください。';
 ---
 
@@ -26,9 +24,7 @@ const defaultDisclaimer = 'この記事はAIによって調査・生成された
     <!-- AI生成警告バナー -->
     <div class="not-prose mb-8 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
       <div class="flex items-start gap-3">
-        <svg class="w-6 h-6 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
+        <ComputerIcon class="w-6 h-6 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
         <div>
           <div class="font-bold text-amber-800 dark:text-amber-200 mb-1">AI調査記事</div>
           <p class="text-sm text-amber-700 dark:text-amber-300 mb-2">
@@ -57,44 +53,5 @@ const defaultDisclaimer = 'この記事はAIによって調査・生成された
 
 <style is:global>
   @reference "../styles/global.css";
-
-  .prose {
-    @apply text-gray-900 dark:text-gray-100;
-  }
-  .prose h2, .prose h3, .prose h4 {
-    @apply text-gray-900 dark:text-gray-100 font-bold mt-8 mb-4;
-  }
-  .prose h2 {
-    @apply text-2xl border-b border-gray-200 dark:border-gray-700 pb-2;
-  }
-  .prose h3 {
-    @apply text-xl;
-  }
-  .prose p {
-    @apply my-4 leading-relaxed;
-  }
-  .prose a {
-    @apply text-gray-900 dark:text-gray-100 underline;
-  }
-  .prose ul, .prose ol {
-    @apply my-4 pl-6;
-  }
-  .prose li {
-    @apply my-1;
-  }
-  .prose blockquote {
-    @apply border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic my-4;
-  }
-  .prose code {
-    @apply bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm;
-  }
-  .prose pre {
-    @apply my-4 rounded-lg;
-  }
-  .prose pre code {
-    @apply bg-transparent p-0;
-  }
-  .prose img {
-    @apply rounded-lg my-4;
-  }
+  @import url("../styles/prose.css");
 </style>
