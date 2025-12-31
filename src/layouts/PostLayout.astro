@@ -1,0 +1,79 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TagList from '../components/TagList.astro';
+
+type Props = {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags: string[];
+  ogImage?: string;
+};
+
+const { title, description, pubDate, updatedDate, tags, ogImage } = Astro.props;
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage}>
+  <article class="prose dark:prose-invert max-w-none">
+    <header class="mb-8 not-prose">
+      <h1 class="text-3xl font-bold mb-2">{title}</h1>
+      <div class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        {updatedDate && (
+          <span class="ml-2">(更新: <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time>)</span>
+        )}
+      </div>
+      <TagList tags={tags} />
+    </header>
+    <slot />
+  </article>
+</BaseLayout>
+
+<style is:global>
+  @reference "../styles/global.css";
+
+  .prose {
+    @apply text-gray-900 dark:text-gray-100;
+  }
+  .prose h2, .prose h3, .prose h4 {
+    @apply text-gray-900 dark:text-gray-100 font-bold mt-8 mb-4;
+  }
+  .prose h2 {
+    @apply text-2xl border-b border-gray-200 dark:border-gray-700 pb-2;
+  }
+  .prose h3 {
+    @apply text-xl;
+  }
+  .prose p {
+    @apply my-4 leading-relaxed;
+  }
+  .prose a {
+    @apply text-gray-900 dark:text-gray-100 underline;
+  }
+  .prose ul, .prose ol {
+    @apply my-4 pl-6;
+  }
+  .prose li {
+    @apply my-1;
+  }
+  .prose blockquote {
+    @apply border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic my-4;
+  }
+  .prose code {
+    @apply bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm;
+  }
+  .prose pre {
+    @apply my-4 rounded-lg;
+  }
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+  .prose img {
+    @apply rounded-lg my-4;
+  }
+</style>

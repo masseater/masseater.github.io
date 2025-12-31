@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+
+const notes = (await getCollection('notes'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 10);
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' });
+};
+---
+
+<BaseLayout title="masseater">
+  <section class="mb-12">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold">Posts</h2>
+      <a href="/posts" class="text-gray-600 dark:text-gray-400 hover:underline">すべて見る →</a>
+    </div>
+    {posts.length > 0 ? (
+      posts.map((post) => (
+        <PostCard
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          slug={post.id}
+          tags={post.data.tags}
+        />
+      ))
+    ) : (
+      <p class="text-gray-600 dark:text-gray-400">記事がありません。</p>
+    )}
+  </section>
+
+  <section>
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold">Notes</h2>
+      <a href="/notes" class="text-gray-600 dark:text-gray-400 hover:underline">すべて見る →</a>
+    </div>
+    {notes.length > 0 ? (
+      <div class="relative">
+        <div class="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+          {notes.map((note) => (
+            <a
+              href={`/notes/${note.id}`}
+              class="flex-shrink-0 w-64 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg snap-start hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              <p class="text-sm line-clamp-3 mb-2">{note.body}</p>
+              <time class="text-xs text-gray-500 dark:text-gray-400" datetime={note.data.pubDate.toISOString()}>
+                {formatDate(note.data.pubDate)}
+              </time>
+            </a>
+          ))}
+        </div>
+      </div>
+    ) : (
+      <p class="text-gray-600 dark:text-gray-400">つぶやきがありません。</p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

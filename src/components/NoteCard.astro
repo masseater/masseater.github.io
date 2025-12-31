@@ -1,0 +1,22 @@
+---
+type Props = {
+  content: string;
+  pubDate: Date;
+  slug: string;
+};
+
+const { content, pubDate, slug } = Astro.props;
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+};
+---
+
+<article class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
+  <a href={`/notes/${slug}`} class="block hover:bg-gray-50 dark:hover:bg-gray-800 -mx-2 px-2 py-2 rounded">
+    <p class="mb-2 whitespace-pre-wrap">{content}</p>
+    <time class="text-sm text-gray-500 dark:text-gray-500" datetime={pubDate.toISOString()}>
+      {formatDate(pubDate)}
+    </time>
+  </a>
+</article>

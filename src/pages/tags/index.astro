@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+
+const tagCounts = posts.reduce((acc, post) => {
+  post.data.tags.forEach((tag) => {
+    acc[tag] = (acc[tag] || 0) + 1;
+  });
+  return acc;
+}, {} as Record<string, number>);
+
+const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title="Tags - masseater">
+  <h1 class="text-3xl font-bold mb-8">Tags</h1>
+  {sortedTags.length > 0 ? (
+    <div class="flex flex-wrap gap-3">
+      {sortedTags.map(([tag, count]) => (
+        <a
+          href={`/tags/${tag}`}
+          class="px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+        >
+          #{tag} <span class="text-gray-500 dark:text-gray-400">({count})</span>
+        </a>
+      ))}
+    </div>
+  ) : (
+    <p class="text-gray-600 dark:text-gray-400">タグがありません。</p>
+  )}
+</BaseLayout>
