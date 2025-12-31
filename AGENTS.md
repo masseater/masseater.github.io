@@ -42,8 +42,10 @@ src/
 │   │   └── {year}/{month}/{slug}/
 │   │       ├── index.md
 │   │       └── images/  # 記事専用画像
-│   └── notes/           # つぶやき
-│       └── {timestamp}-{slug}.md
+│   ├── notes/           # つぶやき
+│   │   └── {timestamp}-{slug}.md
+│   └── ai-research/     # AI調査記事（noindex）
+│       └── {slug}/index.md
 ├── components/
 ├── layouts/
 └── pages/
@@ -73,6 +75,14 @@ src/
 - Twitter/X風の形式
 - タグなし
 - シンプルな表示
+
+### AI調査 (AI Research)
+
+- パス: `/ai-research/{slug}`
+- AIに調査させた内容
+- noindex, nofollow（検索エンジン除外）
+- 警告バナー表示
+- RSSには含まれない
 
 ## 機能一覧
 
@@ -110,8 +120,9 @@ src/
 
 ### レイアウト
 
-- `BaseLayout.astro` - 共通レイアウト（ヘッダー、フッター、ダークモード、検索モーダル）
+- `BaseLayout.astro` - 共通レイアウト（ヘッダー、フッター、ダークモード、検索モーダル、noindex対応）
 - `PostLayout.astro` - 記事詳細ページ用
+- `AIResearchLayout.astro` - AI調査記事用（警告バナー、noindex=true）
 
 ## 注意点
 

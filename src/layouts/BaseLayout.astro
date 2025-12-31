@@ -5,9 +5,10 @@ type Props = {
   title: string;
   description?: string;
   ogImage?: string;
+  noindex?: boolean;
 };
 
-const { title, description = 'masseaterのブログ', ogImage } = Astro.props;
+const { title, description = 'masseaterのブログ', ogImage, noindex = false } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -21,6 +22,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -43,6 +45,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           <a href="/posts" class="hover:underline">Posts</a>
           <a href="/notes" class="hover:underline">Notes</a>
           <a href="/tags" class="hover:underline">Tags</a>
+          <a href="/ai-research" class="hover:underline text-amber-600 dark:text-amber-400">AI調査</a>
           <button id="theme-toggle" class="p-2" aria-label="Toggle theme">
             <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />

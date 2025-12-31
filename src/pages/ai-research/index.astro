@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const articles = (await getCollection('aiResearch', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="AI調査 - masseater" noindex={true}>
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold mb-4">AI調査</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-sm">
+      AIに調査させた内容をまとめた記事です。内容の正確性は保証されません。
+    </p>
+  </div>
+
+  {articles.length > 0 ? (
+    <div class="space-y-6">
+      {articles.map((article) => (
+        <a href={`/ai-research/${article.id}`} class="block group">
+          <article class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <div class="flex-1 min-w-0">
+                <h2 class="text-lg font-bold group-hover:underline">{article.data.title}</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-sm mt-1 line-clamp-2">{article.data.description}</p>
+                <div class="text-gray-500 dark:text-gray-500 text-xs mt-2 flex items-center gap-2">
+                  <time datetime={article.data.pubDate.toISOString()}>
+                    {article.data.pubDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </time>
+                  {article.data.aiModel && (
+                    <>
+                      <span>•</span>
+                      <span>{article.data.aiModel}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </article>
+        </a>
+      ))}
+    </div>
+  ) : (
+    <p class="text-gray-600 dark:text-gray-400">AI調査記事がありません。</p>
+  )}
+</BaseLayout>

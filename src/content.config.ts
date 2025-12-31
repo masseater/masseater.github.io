@@ -21,4 +21,20 @@ const notes = defineCollection({
   }),
 });
 
-export const collections = { posts, notes };
+const aiResearch = defineCollection({
+  loader: glob({ pattern: '**/index.md', base: './src/content/ai-research' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    // AI調査に関するメタ情報
+    aiModel: z.string().optional(), // 使用したAIモデル（例: "Claude 3.5 Sonnet"）
+    researchDate: z.coerce.date().optional(), // 調査実施日
+    disclaimer: z.string().optional(), // カスタム免責事項
+    ogImage: z.string().optional(), // OGP画像
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { posts, notes, aiResearch };
