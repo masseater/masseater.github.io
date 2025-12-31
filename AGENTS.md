@@ -1,8 +1,18 @@
-# masseater's blog - Project Guidelines
+# AGENTS.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## コマンド
+
+```bash
+bun run dev      # 開発サーバー起動 (port 14000)
+bun run build    # ビルド (型チェック + ビルド + Pagefindインデックス生成)
+bun run preview  # ビルド結果プレビュー
+```
 
 ## プロジェクト概要
 
-Astro製の個人ブログサイト。GitHub Pagesでホスティング。
+Astro 5 + Tailwind CSS v4 の静的ブログサイト。GitHub Pagesでホスティング。
 
 | 項目 | 値 |
 |------|-----|
@@ -91,3 +101,20 @@ src/
 - Posts
 - Notes
 - About
+
+## アーキテクチャ
+
+### Content Collections
+
+`src/content.config.ts` で定義。Astro 5.xでは `glob()` ローダーを使用。
+
+### レイアウト
+
+- `BaseLayout.astro` - 共通レイアウト（ヘッダー、フッター、ダークモード、検索モーダル）
+- `PostLayout.astro` - 記事詳細ページ用
+
+## 注意点
+
+- 開発サーバーはポート14000以降を使用
+- `@pagefind/default-ui`の型定義は`src/env.d.ts`で宣言
+- Tailwind v4では`<style>`タグ内で`@apply`使用時に`@reference "../styles/global.css"`が必要
